@@ -1,1 +1,5 @@
 package mysql
+
+func RecordEditData() {
+
+}

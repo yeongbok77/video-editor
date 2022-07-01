@@ -2,7 +2,7 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"video-editor/controller"
+	"github.com/yeongbok77/video-editor/controller"
 )
 
 func SetUpRouter() *gin.Engine {

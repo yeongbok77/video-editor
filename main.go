@@ -1,6 +1,6 @@
 package main
 
-import "video-editor/route"
+import "github.com/yeongbok77/video-editor/route"
 
 func main() {
 	// 初始化MySQL
