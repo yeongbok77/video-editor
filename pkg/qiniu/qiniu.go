@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
+	"log"
 	"strconv"
 )
 
@@ -56,12 +56,12 @@ func UploadVideo(videoPath, fileName string, userId int64) (newVideoURL string, 
 	// 上传文件
 	err = formUploader.PutFile(context.Background(), &ret, upToken, qiniuKey, localFile, nil)
 	if err != nil {
-		fmt.Println("上传文件失败,原因:", err)
-		return
+		log.Fatalf("上传文件失败: %v", err)
+		return "", err
 	}
-	fmt.Println("上传成功,key为:", ret.Key)
+	log.Println("上传成功,key为:", ret.Key)
 	// 返回上传后的文件访问路径
 	newVideoURL = "http://" + StorageUrl + "/" + ret.Key
-	fmt.Println("视频访问路径为：", newVideoURL)
+	log.Println("视频访问路径为：", newVideoURL)
 	return newVideoURL, err
 }
