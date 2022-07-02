@@ -11,10 +11,8 @@ func main() {
 	settings.Init()
 	// 初始化MySQL
 	mysql.Init(settings.Conf.MySQLConfig)
-	// 初始化日志库
 
-	// 启动服务
 	r := route.SetUpRouter()
-
+	// 启动服务
 	r.Run(":8080")
 }

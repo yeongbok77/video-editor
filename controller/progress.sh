@@ -1,0 +1,1 @@
+ffprobe   -v error   -select_streams v:0   -count_packets   -show_entries stream=nb_read_packets   -of csv=p=0  D:\\GO_WORK\\src\\video-editor\\public\\new\\WeChat_20220527235010.mp4

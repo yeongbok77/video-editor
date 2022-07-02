@@ -26,8 +26,7 @@ func Test_helloHandler(t *testing.T) {
 	resultURL := "http://re8twfm01.hd-bkt.clouddn.com/ClipVideo/" + strconv.FormatInt(userId, 10) + "/WeChat_20220526160454.mp4"
 
 	r := SetUpRouter()
-	//将项目中的API注册到测试使用的router
-	r.GET("/recipes", VideoEditorHandler)
+
 	//向注册的路有发起请求
 	req, err := http.NewRequest("GET", "http://127.0.0.1:8080/video-editor/editor?"+
 		"videoURL="+videoURL+"&"+
