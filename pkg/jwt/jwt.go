@@ -24,7 +24,7 @@ func GenToken(userID int64) (aToken, rToken string, err error) {
 		UserID: userID, // 自定义字段
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(8760) * time.Hour).Unix(), // 过期时间
-			Issuer:    "douyinapp",
+			Issuer:    "videoeditor",
 		},
 	}
 

@@ -12,23 +12,23 @@ import (
 //	VideoEditorHandler 视频剪辑接口
 func VideoEditorHandler(c *gin.Context) {
 	// 获取参数
-	videoURL := c.Query("videoURL")
-	StartTime := c.Query("StartTime")
-	EndTime := c.Query("EndTime")
+	videoURL := c.PostForm("videoURL")
+	StartTime := c.PostForm("StartTime")
+	EndTime := c.PostForm("EndTime")
 	//UserId, ok := c.Get("userId")
 	//if !ok {
 	//	log.Fatalln("userId 获取错误")
 	//	c.JSON(http.StatusOK, codeMsgMap[CodeServerError])
 	//	return
 	//}
-	var UserId int64 = 2
+	var UserId int64 = 15
 
 	// 参数校验
 	re := regexp.MustCompile("(http|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?")
 	result := re.FindAllStringSubmatch(videoURL, -1)
 	if result == nil {
 		log.Fatalln("url不合法")
-		c.JSON(http.StatusOK, codeMsgMap[CodeInvalidVideoURL])
+		c.JSON(http.StatusOK, CodeMsgMap[CodeInvalidVideoURL])
 		return
 	}
 	// 视频剪辑时，用户使用类似拖动进度条的形式，来选取起始和终止时间。（参考十行笔记的剪辑方式）
@@ -38,7 +38,7 @@ func VideoEditorHandler(c *gin.Context) {
 	rEnd := strings.Split(EndTime, ":")
 	if len(rStart) != 3 || len(rEnd) != 3 {
 		log.Fatalln("时间参数不合法")
-		c.JSON(http.StatusOK, codeMsgMap[CodeInvalidTime])
+		c.JSON(http.StatusOK, CodeMsgMap[CodeInvalidTime])
 		return
 	}
 
@@ -46,7 +46,7 @@ func VideoEditorHandler(c *gin.Context) {
 	ResultVideoURL, err := logic.VideoEditor(videoURL, StartTime, EndTime, UserId)
 	if err != nil {
 		log.Fatalf("logic.VideoEditor 业务内部错误: %v", err)
-		c.JSON(http.StatusOK, codeMsgMap[CodeEditError])
+		c.JSON(http.StatusOK, CodeMsgMap[CodeEditError])
 		return
 	}
 

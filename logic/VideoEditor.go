@@ -1,11 +1,20 @@
 package logic
 
 import (
+	"encoding/json"
+	"fmt"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"github.com/yeongbok77/video-editor/dao/mysql"
 	"github.com/yeongbok77/video-editor/pkg/qiniu"
 	"log"
+	"math/rand"
+	"net"
+	"os"
+	"path"
+	"regexp"
+	"strconv"
 	"strings"
+	"time"
 )
 
 var (
@@ -31,8 +40,21 @@ func VideoEditor(videoURL, StartTime, EndTime string, userId int64) (ResultVideo
 	}
 
 	// 根据起始与终止时间，进行视频剪辑。
+	//a, err := ffmpeg.Probe(newVideoPATH + fileName)
+	//if err != nil {
+	//	log.Fatalf("ffmpeg.Probe err: %v", err)
+	//	return "", err
+	//}
+	//totalDuration, err := probeDuration(a)
+	//if err != nil {
+	//	log.Fatalf("probeDuration err: %v", err)
+	//	return "", err
+	//}
+
 	err = ffmpeg.Input(tmpVideoPATH+fileName, ffmpeg.KwArgs{}).
-		Output(newVideoPATH+fileName, ffmpeg.KwArgs{"ss": StartTime, "to": EndTime, "c": "copy"}).OverWriteOutput().Run()
+		Output(newVideoPATH+fileName, ffmpeg.KwArgs{"ss": StartTime, "to": EndTime, "c": "copy", "progress": "D:\\GO_WORK\\src\\video-editor\\public\\progress\\progress.txt"}).
+		//GlobalArgs("-progress", TempSock(totalDuration)).
+		OverWriteOutput().Run()
 	if err != nil {
 		log.Fatalf("视频剪辑错误: %v", err)
 		return "", VideoEditErr
@@ -53,4 +75,72 @@ func VideoEditor(videoURL, StartTime, EndTime string, userId int64) (ResultVideo
 	}
 
 	return ResultVideoURL, err
+}
+
+func probeDuration(a string) (float64, error) {
+	pd := probeData{}
+	err := json.Unmarshal([]byte(a), &pd)
+	if err != nil {
+		return 0, err
+	}
+	f, err := strconv.ParseFloat(pd.Format.Duration, 64)
+	if err != nil {
+		return 0, err
+	}
+	return f, nil
+}
+
+type probeFormat struct {
+	Duration string `json:"duration"`
+}
+
+type probeData struct {
+	Format probeFormat `json:"format"`
+}
+
+func TempSock(totalDuration float64) string {
+	// serve
+
+	rand.Seed(time.Now().Unix())
+	sockFileName := path.Join(os.TempDir(), fmt.Sprintf("%d_sock", rand.Int()))
+	l, err := net.Listen("unix", sockFileName)
+	if err != nil {
+		panic(err)
+	}
+
+	go func() {
+		re := regexp.MustCompile(`out_time_ms=(\d+)`)
+		fd, err := l.Accept()
+		if err != nil {
+			log.Fatal("accept error:", err)
+		}
+		buf := make([]byte, 16)
+		data := ""
+		progress := ""
+		for {
+			_, err := fd.Read(buf)
+			if err != nil {
+				return
+			}
+			data += string(buf)
+			a := re.FindAllStringSubmatch(data, -1)
+			cp := ""
+			if len(a) > 0 && len(a[len(a)-1]) > 0 {
+				c, _ := strconv.Atoi(a[len(a)-1][len(a[len(a)-1])-1])
+				cp = fmt.Sprintf("%.2f", float64(c)/totalDuration/1000000)
+			}
+			if strings.Contains(data, "progress=end") {
+				cp = "done"
+			}
+			if cp == "" {
+				cp = ".0"
+			}
+			if cp != progress {
+				progress = cp
+				fmt.Println("progress: ", progress)
+			}
+		}
+	}()
+
+	return sockFileName
 }
