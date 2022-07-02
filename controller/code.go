@@ -22,12 +22,3 @@ var CodeMsgMap = map[ResCode]string{
 	CodeEditError:       "剪辑失败,请重试",
 	CodeServerError:     "系统错误",
 }
-
-// Msg     根据 Code 返回对应的状态描述
-func (c ResCode) Msg() string {
-	msg, ok := CodeMsgMap[c]
-	if !ok {
-		msg = CodeMsgMap[CodeServerError]
-	}
-	return msg
-}

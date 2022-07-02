@@ -15,19 +15,18 @@ func VideoEditorHandler(c *gin.Context) {
 	videoURL := c.PostForm("videoURL")
 	StartTime := c.PostForm("StartTime")
 	EndTime := c.PostForm("EndTime")
-	//UserId, ok := c.Get("userId")
-	//if !ok {
-	//	log.Fatalln("userId 获取错误")
-	//	c.JSON(http.StatusOK, codeMsgMap[CodeServerError])
-	//	return
-	//}
-	var UserId int64 = 1
+	UserId, ok := c.Get("userId")
+	if !ok {
+		log.Fatalln("userId 获取错误")
+		c.JSON(http.StatusOK, CodeMsgMap[CodeServerError])
+		return
+	}
 
 	// 参数校验
 	re := regexp.MustCompile("(http|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?")
 	result := re.FindAllStringSubmatch(videoURL, -1)
 	if result == nil {
-		log.Fatalln("url不合法")
+		log.Fatalln("用户输入的url不合法")
 		c.JSON(http.StatusOK, CodeMsgMap[CodeInvalidVideoURL])
 		return
 	}
@@ -43,7 +42,7 @@ func VideoEditorHandler(c *gin.Context) {
 	}
 
 	// 业务逻辑
-	ResultVideoURL, err := logic.VideoEditor(videoURL, StartTime, EndTime, UserId)
+	ResultVideoURL, err := logic.VideoEditor(videoURL, StartTime, EndTime, UserId.(int64))
 	if err != nil {
 		log.Fatalf("logic.VideoEditor 业务内部错误: %v", err)
 		c.JSON(http.StatusOK, CodeMsgMap[CodeEditError])

@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/yeongbok77/video-editor/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -35,10 +36,10 @@ func Init(cfg *settings.MySQLConfig) (err error) {
 		log.Println(err)
 	}
 
-	//err = db.AutoMigrate(&model.VideoEditData{})
-	//if err != nil {
-	//	log.Println(err)
-	//}
+	err = db.AutoMigrate(&model.VideoEditData{})
+	if err != nil {
+		log.Println(err)
+	}
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(cfg.MaxIdleConns)
 

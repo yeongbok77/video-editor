@@ -16,7 +16,7 @@ var (
 )
 
 func EditorProgress(fileName string) (resPercent string, err error) {
-	// 追加写入文件名
+	// 写入脚本指令
 	file, err := os.OpenFile(progressShellPath, os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("progressShell 文件打开失败", err)
@@ -28,8 +28,6 @@ func EditorProgress(fileName string) (resPercent string, err error) {
 	write := bufio.NewWriter(file)
 	write.WriteString(progressComment + fileName)
 	write.Flush()
-
-	//-----------------------------------------------------
 
 	// 执行脚本
 	cmd := exec.Command("C:\\Program Files\\Git\\bin\\bash", progressShellPath)

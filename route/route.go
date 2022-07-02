@@ -3,6 +3,7 @@ package route
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/yeongbok77/video-editor/controller"
+	middlewares "github.com/yeongbok77/video-editor/middleware"
 	"net/http"
 )
 
@@ -14,9 +15,9 @@ func SetUpRouter() *gin.Engine {
 		c.HTML(http.StatusOK, "editor.html", nil)
 	})
 
-	r.POST("/video-editor/editor", controller.VideoEditorHandler)
+	r.POST("/video-editor/editor", middlewares.JWTAuthMiddleware(), controller.VideoEditorHandler)
 
-	r.GET("/video-editor/editor/progress", controller.VideoEditorProgress)
+	r.GET("/video-editor/editor/progress", middlewares.JWTAuthMiddleware(), controller.VideoEditorProgress)
 
 	return r
 }
