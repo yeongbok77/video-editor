@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>视频剪辑</title>
+</head>
+<body>
+
+<form action="/video-editor/editor" method="post" novalidate autocapitalize="off">
+    <div>
+        <labal for="videoURL">videoURL:</labal>
+        <input type="text" name="videoURL" id="videoURL">
+    </div>
+
+
+    <div>
+        <label for="StartTime">StartTime:</label>
+        <input type="StartTime" name="StartTime" id="StartTime">
+    </div>
+
+
+
+   <div>
+       <label for="EndTime">EndTime:</label>
+       <input type="EndTime" name="EndTime" id="EndTime">
+   </div>
+
+    <div>
+        <input type="submit" value="开始剪辑">
+    </div>
+
+
+</form>
+
+
+</body>
+</html>

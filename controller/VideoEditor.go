@@ -21,7 +21,7 @@ func VideoEditorHandler(c *gin.Context) {
 	//	c.JSON(http.StatusOK, codeMsgMap[CodeServerError])
 	//	return
 	//}
-	var UserId int64 = 15
+	var UserId int64 = 1
 
 	// 参数校验
 	re := regexp.MustCompile("(http|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?")
