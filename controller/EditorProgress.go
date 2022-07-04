@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// VideoEditorProgress 获取视频剪辑进度
 func VideoEditorProgress(c *gin.Context) {
 	// 获取文件名
 	fileName := c.Query("fileName")

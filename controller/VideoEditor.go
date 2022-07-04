@@ -1,3 +1,4 @@
+// Package controller 接口controller 进行获取参数，参数校验，错误处理等操作
 package controller
 
 import (

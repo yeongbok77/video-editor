@@ -1,3 +1,4 @@
+// Package logic 业务处理层
 package logic
 
 import (
@@ -15,6 +16,7 @@ var (
 	progressShellPath string = "D:\\GO_WORK\\src\\video-editor\\controller\\progress.sh"
 )
 
+// VideoEditor 视频剪辑业务逻辑
 func VideoEditor(videoURL, StartTime, EndTime string, userId int64) (ResultVideoURL string, err error) {
 	// 获取url中的文件名称
 	splitURL := strings.Split(videoURL, "/")

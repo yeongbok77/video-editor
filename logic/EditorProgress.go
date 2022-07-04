@@ -15,7 +15,12 @@ var (
 	progressComment string = "ffprobe   -v error   -select_streams v:0   -count_packets   -show_entries stream=nb_read_packets   -of csv=p=0  D:\\\\GO_WORK\\\\src\\\\video-editor\\\\public\\\\new\\\\"
 )
 
+// EditorProgress 计算视频剪辑进度的业务逻辑
 func EditorProgress(fileName string) (resPercent string, err error) {
+	// 先打开文件，写入脚本指令，然后执行脚本，用来获取视频的总帧数
+	// 再打开转码时记录数据的文件，从中取出最后一个frame参数
+	// frame参数 / 总帧数 * 100% 即为剪辑进度
+	//
 	// 写入脚本指令
 	file, err := os.OpenFile(progressShellPath, os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {

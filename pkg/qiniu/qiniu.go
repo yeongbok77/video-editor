@@ -31,7 +31,7 @@ func UploadVideo(videoPath, fileName string, userId int64) (newVideoURL string, 
 	putPolicy := storage.PutPolicy{
 		Scope:         Bucket,
 		Expires:       7200,
-		PersistentOps: "avthumb/mp4|saveas/" + encodeString,
+		PersistentOps: "avthumb/mp4|saveas/" + encodeString, // 上传时转码
 	}
 
 	// 获取上传token

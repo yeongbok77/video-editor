@@ -1,3 +1,4 @@
+// Package mysql  mysql数据库操作
 package mysql
 
 import (
@@ -5,6 +6,7 @@ import (
 	"log"
 )
 
+// RecordEditData 剪辑记录持久化操作
 func RecordEditData(userId int64, fileName string, resultVideoURL string) (err error) {
 	videoEditData := &model.VideoEditData{
 		UserId:         userId,

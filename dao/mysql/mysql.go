@@ -14,6 +14,7 @@ import (
 
 var db *gorm.DB
 
+// Init mysql初始化
 func Init(cfg *settings.MySQLConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		cfg.User,
